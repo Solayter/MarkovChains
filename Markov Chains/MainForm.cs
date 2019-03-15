@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace Markov_Chains
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        RootWord rt = new RootWord(0, 10);
+        public MainForm()
         {
             InitializeComponent();
+           
         }
     }
 }

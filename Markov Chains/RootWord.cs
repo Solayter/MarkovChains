@@ -6,75 +6,83 @@ using System.Threading.Tasks;
 
 namespace Markov_Chains
 {
-    [Serializable]
     public class RootWord
     {
-        /// <summary>
-        /// Глобальный номер корневого слова.
-        /// </summary>
-        public int globalId;
-        /// <summary>
-        /// Локальный номер корневого слова. Всегда равен нулю.
-        /// </summary>
-        public int localId;
-        /// <summary>
-        /// Строка со словом.
-        /// </summary>
-        public string word;
-        /// <summary>
-        /// Список возможных слов, следующих за корневым.
-        /// </summary>
-        public List<NextWord> nextWords;
-        /// <summary>
-        /// Матрица соответствий для данного корневого слова.
-        /// </summary>
-        public decimal[,] matrix;
-        /// <summary>
-        /// Создание нового корневого слова.
-        /// </summary>
-        /// <param name="word">Строка со словом.</param>
-        /// <param name="globalId">Глобальный номер корневого слова.</param>
-        /// <param name="matrixSize">Максимальный размер матрицы соответствий.</param>
-        public RootWord(string word, int globalId, byte matrixSize)
+        public List<string> wordDict;
+        public decimal[,,] matrix;
+        public string wordString;
+        public int wordsCount;
+        public int outWordsCount;
+
+        public RootWord(int wordsCount, string wordString, int outWordsCount)
         {
-            this.word = word;
-            this.globalId = globalId;
-            localId = 0;
-            nextWords = new List<NextWord>();
-            matrix = new decimal[matrixSize,matrixSize];
-            ZerosForMatrix(matrixSize);
+            wordDict = new List<string>();
+            matrix = new decimal[wordsCount, wordsCount, 2];
+            this.wordString = wordString;
+            this.wordsCount = wordsCount;
+            this.outWordsCount = outWordsCount;
+            wordDict.Add(wordString);
         }
-        /// <summary>
-        /// Создать новое возможное слово, следующее за корневым.
-        /// </summary>
-        /// <param name="word">Строка со словом.</param>
-        public void AddNextWord(string word)
+    
+        public void AddNewWord(string wordString)
         {
-            nextWords.Add(new NextWord(word, nextWords.Count + 1));
-        }
-        /// <summary>
-        /// Заполнение матрицы соответствий нулями.
-        /// </summary>
-        /// <param name="matrixSize">Размер матрицы.</param>
-        private void ZerosForMatrix(byte matrixSize)
-        {
-            for (int i = 0; i < matrixSize; i++)
+            int ind;
+            foreach(var word in wordDict)
             {
-                for (int j = 0; j < matrixSize; j++)
+                if(word.Equals(wordString))
                 {
-                    matrix[i, j] = 0;
+                    ind = wordDict.IndexOf(word);
+                    break;
                 }
+                wordDict.Add(wordString);
+                break;
             }
         }
-        /// <summary>
-        /// Получить массив самых популярных слов.
-        /// </summary>
-        /// <returns>Список самых популярных слов</returns>
-        public string[] GetWords()
+        public void AddNewChain(string firstWord, string secondWord, decimal freq)
         {
-            string[] words = new string[3];
-            return words;
+            int firstInd = 0;
+            int secondInd = 0;
+            foreach (var word in wordDict)
+            {
+                if (word.Equals(firstWord))
+                    firstInd = wordDict.IndexOf(word);
+                if (word.Equals(secondWord))
+                    secondInd = wordDict.IndexOf(word);
+            }
+            matrix[firstInd, secondInd, 0] = freq;
         }
+        public string[] GetTopWords(string thisWord)
+        {
+            int ind = 0;
+            int[] indexes = new int[outWordsCount];
+            string[] output = new string[outWordsCount];
+            decimal[] buffer = new decimal[wordsCount];
+
+            foreach (var word in wordDict)
+            {
+                if (word.Equals(thisWord))
+                {
+                    ind = wordDict.IndexOf(word);
+                    break;
+                }
+            }
+            for (int i = 0; i < wordsCount; i++)
+            {
+                buffer[i] = matrix[ind, i, 0];
+            }
+            
+            for (int i = 0; i < outWordsCount; i++)
+            {
+                indexes[i] = Array.IndexOf(buffer, buffer.Max());
+                buffer[indexes[i]] = 0;
+            }
+            for (int i = 0; i < outWordsCount; i++)
+            {
+                output[i] = wordDict[indexes[i]];
+            }
+            return output;
+        }
+
 
     }
 }

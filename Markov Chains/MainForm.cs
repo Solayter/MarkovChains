@@ -12,11 +12,12 @@ namespace Markov_Chains
 {
     public partial class MainForm : Form
     {
-        RootWord rt = new RootWord(0, 10);
+        Logics sas;
         public MainForm()
         {
             InitializeComponent();
-           
+            sas = new Logics(10);
+            
         }
     }
 }

@@ -8,43 +8,38 @@ namespace Markov_Chains
 {
     public class Logics
     {
-        /// <summary>
-        /// Список корневых слов.
-        /// </summary>
-        private List<RootWord> rootWords;
-        /// <summary>
-        /// Количество корневых слов.
-        /// </summary>
-        private int rootWordsCount;
-        /// <summary>
-        /// Максимальный размер матрицы соответствий. Следовательно максимальнкое количество слов для каждого корневого слова.
-        /// </summary>
-        private byte matrixSize;
-        /// <summary>
-        /// Создание класса логики.
-        /// </summary>
-        /// <param name="matrixSize">Максимальный размер матрицы соответствий. Следовательно максимальнкое количество слов для каждого корневого слова.</param>
-        public Logics(byte matrixSize)
+        List<RootWord> rootWords;
+        int wordsCount;
+        public Logics(int wordsCount)
         {
             rootWords = new List<RootWord>();
-            rootWordsCount = 0;
-            this.matrixSize = matrixSize;
+            this.wordsCount = wordsCount;
+            AddTestData();
         }
-        /// <summary>
-        /// Добавление нового корневого слова.
-        /// </summary>
-        /// <param name="word">Строка со словом.</param>
-        public void AddRootWord(string word)
+        public string[] FindNextWords(string rootWord, string nextWord)
         {
-            rootWords.Add(new RootWord(word, rootWordsCount++, matrixSize));
+            foreach (var word in rootWords)
+            {
+                if(word.Equals(rootWord))
+                {
+                    return word.GetTopWords(nextWord);
+                }
+            }
+            return null;
         }
-
-        /// <summary>
-        /// Добавление корневых слов для тестирования.
-        /// </summary>
         public void AddTestData()
         {
-            
+            rootWords.Add(new RootWord(wordsCount, "пиджак", 2));
+            rootWords[0].AddNewWord("черный");
+            rootWords[0].AddNewWord("синий");
+            rootWords[0].AddNewWord("белый");
+            rootWords[0].AddNewWord("красный");
+            rootWords[0].AddNewChain("пиджак", "черный", 0.4m);
+            rootWords[0].AddNewChain("пиджак", "белый", 0.4m);
+            rootWords[0].AddNewChain("пиджак", "синий", 0.1m);
+            rootWords[0].AddNewChain("пиджак", "красный", 0.1m);
+            string[] sas = rootWords[0].GetTopWords("пиджак");
         }
+
     }
 }

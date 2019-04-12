@@ -23,7 +23,6 @@ namespace Markov_Chains
             this.outWordsCount = outWordsCount;
             wordDict.Add(wordString);
         }
-    
         public void AddNewWord(string wordString)
         {
             int ind;
@@ -38,26 +37,42 @@ namespace Markov_Chains
                 break;
             }
         }
-        public void AddNewChain(string firstWord, string secondWord, decimal freq)
+        public void AddNewChain(string firstWord, string secondWord)
         {
             int firstInd = 0;
             int secondInd = 0;
+            if (!wordDict.Contains(secondWord))
+            {
+                wordDict.Add(secondWord);
+            }
             foreach (var word in wordDict)
             {
                 if (word.Equals(firstWord))
+                {
                     firstInd = wordDict.IndexOf(word);
-                if (word.Equals(secondWord))
-                    secondInd = wordDict.IndexOf(word);
+                    break;
+                }
             }
-            matrix[firstInd, secondInd, 0] = freq;
+            foreach (var word in wordDict)
+            {
+                if (word.Equals(secondWord))
+                {
+                    secondInd = wordDict.IndexOf(word);
+                    break;
+                }
+            }
+            matrix[firstInd, secondInd, 0] += 1;
         }
         public string[] GetTopWords(string thisWord)
         {
             int ind = 0;
             int[] indexes = new int[outWordsCount];
-            string[] output = new string[outWordsCount];
+            string[] output = new string[] { "", "", "" };
             decimal[] buffer = new decimal[wordsCount];
-
+            if(!wordDict.Contains(thisWord))
+            {
+                return output;
+            }
             foreach (var word in wordDict)
             {
                 if (word.Equals(thisWord))
@@ -78,7 +93,10 @@ namespace Markov_Chains
             }
             for (int i = 0; i < outWordsCount; i++)
             {
-                output[i] = wordDict[indexes[i]];
+                if (indexes[i] == 0)
+                    output[i] = "";
+                else
+                    output[i] = wordDict[indexes[i]];
             }
             return output;
         }

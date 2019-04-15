@@ -49,7 +49,7 @@
             this.buttonSearch.Font = new System.Drawing.Font("Comic Sans MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonSearch.Location = new System.Drawing.Point(516, 11);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(116, 67);
+            this.buttonSearch.Size = new System.Drawing.Size(164, 67);
             this.buttonSearch.TabIndex = 1;
             this.buttonSearch.Text = "Поиск";
             this.buttonSearch.UseVisualStyleBackColor = true;
@@ -89,7 +89,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(639, 86);
+            this.ClientSize = new System.Drawing.Size(686, 86);
             this.Controls.Add(this.buttonWordSecond);
             this.Controls.Add(this.buttonWordThird);
             this.Controls.Add(this.buttonWordFirst);

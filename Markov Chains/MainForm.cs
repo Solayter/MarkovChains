@@ -68,10 +68,10 @@ namespace Markov_Chains
             str = input.Split(' ');
             for (int i = 0; i < str.Length - sym; i++)
             {
+                logics.AddNewRoot(str[0]);
                 logics.AddNewChains(str[0], str[i], str[i + 1]);
             }
             textBoxInput.Text = "";
-            
         }
     }
 }
